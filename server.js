@@ -7,7 +7,6 @@ const allowedOrigins = ['https://trade-ideas-beryl.vercel.app'];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
@@ -20,18 +19,14 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Workspace-API-Key']
 };
 
-// Use CORS and allow specific origin
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
 
 app.use(express.json());
 
 // Middleware to log the headers for debugging
 app.use((req, res, next) => {
   console.log('Request Headers:', req.headers);
-  res.setHeader('Access-Control-Allow-Origin', 'https://trade-ideas-beryl.vercel.app');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Workspace-API-Key');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
   next();
 });
 
@@ -71,6 +66,12 @@ app.post('/api/response', async (req, res) => {
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
   }
+});
+
+// Handle any errors and log them
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 const port = process.env.PORT || 3000;
