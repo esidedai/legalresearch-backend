@@ -3,7 +3,6 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 
-// Adjust the CORS configuration
 const corsOptions = {
   origin: ['https://trade-ideas-beryl.vercel.app', 'http://localhost:3000'], // Add any other allowed origins here
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
