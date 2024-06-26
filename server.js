@@ -3,7 +3,15 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 
-app.use(cors({ origin: '*' }));
+// Adjust the CORS configuration
+const corsOptions = {
+  origin: ['https://trade-ideas-beryl.vercel.app', 'http://localhost:3000'], // Add any other allowed origins here
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const API_KEY = '11eee940-b39f-3bc0-b1e0-edab9493f797';
@@ -45,4 +53,4 @@ app.post('/api/response', async (req, res) => {
   }
 });
 
-module.exports = app; 
+module.exports = app;
