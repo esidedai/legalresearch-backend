@@ -19,6 +19,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Workspace-API-Key']
 };
 
+// Use CORS middleware
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
 
@@ -32,6 +33,14 @@ app.use((req, res, next) => {
 
 const API_KEY = '11eee940-b39f-3bc0-b1e0-edab9493f797';
 const BASE_URL = 'https://retune.so/api/chat';
+
+// Middleware to set CORS headers explicitly for all responses
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://trade-ideas-beryl.vercel.app');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Workspace-API-Key');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  next();
+});
 
 app.get('/', (req, res) => {
   res.send('Welcome to the API Gateway!');
