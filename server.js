@@ -9,6 +9,11 @@ app.use(express.json());
 const API_KEY = '11eee940-b39f-3bc0-b1e0-edab9493f797';
 const BASE_URL = 'https://retune.so/api/chat';
 
+// Welcome route to test the backend URL
+app.get('/', (req, res) => {
+  res.send('Welcome to the API Gateway!');
+});
+
 // Endpoint to create a new thread
 app.post('/api/new-thread', async (req, res) => {
   try {
@@ -40,7 +45,4 @@ app.post('/api/response', async (req, res) => {
   }
 });
 
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Proxy server is running on http://localhost:${PORT}`);
-});
+module.exports = app; 
