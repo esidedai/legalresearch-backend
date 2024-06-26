@@ -1,16 +1,20 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');
 const app = express();
 
-const corsOptions = {
-  origin: ['https://trade-ideas-beryl.vercel.app', 'http://localhost:3000'], // Add any other allowed origins here
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
-};
+// Middleware to set CORS headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://trade-ideas-beryl.vercel.app'); // Allow specific origin
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true'); // Allow credentials
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204); // Send OK status for preflight requests
+  } else {
+    next();
+  }
+});
 
-app.use(cors(corsOptions));
 app.use(express.json());
 
 const API_KEY = '11eee940-b39f-3bc0-b1e0-edab9493f797';
