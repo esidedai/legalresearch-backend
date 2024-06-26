@@ -3,13 +3,24 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 
-// Use CORS and allow all origins
-app.use(cors());
+const allowedOrigins = ['https://trade-ideas-beryl.vercel.app'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
-
-// Explicitly handle OPTIONS requests
-app.options('*', cors()); // include this line to handle OPTIONS preflight requests
 
 const API_KEY = '11eee940-b39f-3bc0-b1e0-edab9493f797';
 const BASE_URL = 'https://retune.so/api/chat';
