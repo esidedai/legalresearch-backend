@@ -14,13 +14,26 @@ const corsOptions = {
       return callback(new Error(msg), false);
     }
     return callback(null, true);
-  }
+  },
+  optionsSuccessStatus: 200,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Workspace-API-Key']
 };
 
+// Use CORS and allow specific origin
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 app.use(express.json());
+
+// Middleware to log the headers for debugging
+app.use((req, res, next) => {
+  console.log('Request Headers:', req.headers);
+  res.setHeader('Access-Control-Allow-Origin', 'https://trade-ideas-beryl.vercel.app');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Workspace-API-Key');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  next();
+});
 
 const API_KEY = '11eee940-b39f-3bc0-b1e0-edab9493f797';
 const BASE_URL = 'https://retune.so/api/chat';
@@ -37,6 +50,7 @@ app.post('/api/new-thread', async (req, res) => {
         'X-Workspace-API-Key': API_KEY
       }
     });
+    console.log('Response Headers (new-thread):', response.headers);
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -52,10 +66,16 @@ app.post('/api/response', async (req, res) => {
         'X-Workspace-API-Key': API_KEY
       }
     });
+    console.log('Response Headers (response):', response.headers);
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
   }
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
 module.exports = app;
