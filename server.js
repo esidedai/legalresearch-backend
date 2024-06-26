@@ -3,7 +3,14 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 
-app.use(cors()); // This will allow all origins by default
+app.use(cors({
+  origin: '*',  // Allows all domains to access your backend
+  methods: ['GET', 'POST'],  // Specify methods allowed when accessing the resource
+  allowedHeaders: ['Content-Type', 'X-Workspace-API-Key'],  // Explicitly define headers that are allowed
+  credentials: true,  // Maintain this if you need to handle cookies/session
+  preflightContinue: false,  // Respond to preflight requests with a 204 status
+  optionsSuccessStatus: 204  // Some legacy browsers choke on 204
+}));
 
 app.use(express.json());
 
