@@ -63,14 +63,17 @@ app.post('/api/response', async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
         'X-Workspace-API-Key': API_KEY
-      }
+      },
+      timeout: 10000 // Set timeout to 10 seconds
     });
     console.log('Response Headers (response):', response.headers);
     res.json(response.data);
   } catch (error) {
+    console.error('Error in /api/response:', error);
     res.status(error.response?.status || 500).json({ error: error.message });
   }
 });
+
 
 // Handle any errors and log them
 app.use((err, req, res, next) => {
