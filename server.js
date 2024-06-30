@@ -14,13 +14,14 @@ const corsOptions = {
     }
     return callback(null, true);
   },
-  optionsSuccessStatus: 200,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Workspace-API-Key']
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Workspace-API-Key'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 app.use(express.json());
 
@@ -30,14 +31,6 @@ app.use((req, res, next) => {
   res.on('finish', () => {
     console.log('Response Headers:', res.getHeaders());
   });
-  next();
-});
-
-// Manually set headers for CORS
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://trade-ideas-beryl.vercel.app');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Workspace-API-Key');
-  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
   next();
 });
 
