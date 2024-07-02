@@ -3,7 +3,10 @@ const axios = require('axios');
 const cors = require('cors');
 const app = express();
 
-const allowedOrigins = ['https://trade-ideas-beryl.vercel.app'];
+const allowedOrigins = [
+    'https://tradeideas.vercel.app',
+    'http://localhost:3000'
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
