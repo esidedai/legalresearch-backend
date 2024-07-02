@@ -64,7 +64,7 @@ app.post('/api/response', async (req, res) => {
         'Content-Type': 'application/json',
         'X-Workspace-API-Key': API_KEY
       },
-      timeout: 10000 // Set timeout to 10 seconds
+      timeout: 60000 // Set timeout to 10 seconds
     });
     console.log('Response Headers (response):', response.headers);
     res.json(response.data);
