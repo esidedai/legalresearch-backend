@@ -62,21 +62,30 @@ app.post('/api/new-thread', async (req, res) => {
 app.post('/api/response', async (req, res) => {
   const { threadId, input } = req.body;
   try {
-    const response = await axios.post(`${BASE_URL}/11eee940-df2f-6cb0-bb38-d5792b1045ea/response`, { threadId, input }, {
+    const response = await axios({
+      method: 'post',
+      url: `${BASE_URL}/11eee940-df2f-6cb0-bb38-d5792b1045ea/response`,
+      data: { threadId, input },
       headers: {
         'Content-Type': 'application/json',
         'X-Workspace-API-Key': API_KEY
       },
-      timeout: 60000 // Set timeout to 10 seconds
+      responseType: 'stream' // Enable streaming
     });
-    console.log('Response Headers (response):', response.headers);
-    res.json(response.data);
+
+    response.data.on('data', (chunk) => {
+      res.write(chunk);
+    });
+
+    response.data.on('end', () => {
+      res.end();
+    });
+
   } catch (error) {
     console.error('Error in /api/response:', error);
     res.status(error.response?.status || 500).json({ error: error.message });
   }
 });
-
 
 // Handle any errors and log them
 app.use((err, req, res, next) => {
