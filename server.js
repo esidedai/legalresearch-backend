@@ -74,7 +74,9 @@ app.post('/api/response', async (req, res) => {
     });
 
     response.data.on('data', (chunk) => {
-      res.write(chunk);
+      const json = JSON.parse(chunk.toString());
+      const value = json.response.value;
+      res.write(value);
     });
 
     response.data.on('end', () => {
