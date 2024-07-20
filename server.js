@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/new-thread', async (req, res) => {
   try {
-    const response = await axios.post(${BASE_URL}/11eee940-df2f-6cb0-bb38-d5792b1045ea/new-thread, {}, {
+    const response = await axios.post(`${BASE_URL}/11eee940-df2f-6cb0-bb38-d5792b1045ea/new-thread`, {}, {
       headers: {
         'Content-Type': 'application/json',
         'X-Workspace-API-Key': API_KEY
@@ -62,7 +62,7 @@ app.post('/api/new-thread', async (req, res) => {
 app.post('/api/response', async (req, res) => {
   const { threadId, input } = req.body;
   try {
-    const response = await axios.post(${BASE_URL}/11eee940-df2f-6cb0-bb38-d5792b1045ea/response, { threadId, input }, {
+    const response = await axios.post(`${BASE_URL}/11eee940-df2f-6cb0-bb38-d5792b1045ea/response`, { threadId, input }, {
       headers: {
         'Content-Type': 'application/json',
         'X-Workspace-API-Key': API_KEY
@@ -86,7 +86,7 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(Server is running on port ${port});
+  console.log(`Server is running on port ${port}`);
 });
 
 module.exports = app;
